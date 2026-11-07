@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<!-- Documento HTML5 -->
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- Faz a página se adaptar à largura de qualquer tela -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Título que aparece na aba do navegador (exigido pela atividade) -->
+  <title>Meus sites favoritos</title>
+
+  <!-- Descrição da página e ícone da aba (um emoji desenhado em SVG) -->
+  <meta name="description" content="Os sites favoritos de Nicholas Vieira - Trabalho ETEC, Agenda 12.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>⭐</text></svg>">
+
+  <!-- Fontes do Google Fonts: uma para títulos e outra para textos (com reservas caso falhem) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       1. VARIÁVEIS
+       Todas as cores e fontes ficam aqui, fáceis de trocar.
+       ========================================================= */
+
+    /* Registra --ambiente como uma cor de verdade, para o navegador
+       conseguir animar a mudança suave de uma cor para outra */
+    @property --ambiente {
+      syntax: "<color>";
+      inherits: true;
+      initial-value: #4f46e5;
+    }
+
+    :root {
+      --fundo: #0b0e1c;                       /* azul-noite do fundo */
+      --texto: #eef0ff;                       /* texto principal */
+      --suave: #9aa1c7;                       /* texto secundário */
+      --vidro: rgba(255, 255, 255, 0.045);    /* superfície dos cartões */
+      --borda: rgba(255, 255, 255, 0.10);     /* contorno dos cartões */
+      --ambiente: #4f46e5;                    /* cor da luz de fundo (muda no hover) */
+
+      --fonte-titulo: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+      --fonte-texto: "Figtree", "Segoe UI", system-ui, sans-serif;
+
+      color-scheme: dark;
+      transition: --ambiente 0.9s ease;       /* troca de cor suave */
+    }
+
+    /* =========================================================
+       2. BASE
+       ========================================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* O fundo fica no <html> para a luz colorida aparecer por cima dele */
+    html {
+      background: var(--fundo);
+    }
+
+    body {
+      min-height: 100vh;
+      padding: clamp(56px, 9vw, 112px) 20px 56px;
+      font-family: var(--fonte-texto);
+      color: var(--texto);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* Luz de fundo: dois brilhos suaves que usam a cor do site em destaque */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(70% 55% at 50% -10%, color-mix(in srgb, var(--ambiente) 38%, transparent), transparent 70%),
+        radial-gradient(40% 40% at 90% 100%, color-mix(in srgb, var(--ambiente) 16%, transparent), transparent 70%);
+    }
+
+    /* Contorno visível para quem navega pelo teclado */
+    a:focus-visible {
+      outline: 2px solid var(--texto);
+      outline-offset: 4px;
+    }
+
+    /* =========================================================
+       3. CABEÇALHO
+       ========================================================= */
+    .topo {
+      max-width: 780px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .topo h1 {
+      font-family: var(--fonte-titulo);
+      font-weight: 800;
+      font-size: clamp(2.3rem, 6.5vw, 4rem);
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+      text-wrap: balance;               /* quebra de linha equilibrada */
+    }
+
+    .topo p {
+      max-width: 44ch;
+      margin: 20px auto 0;
+      color: var(--suave);
+      font-size: 1.1rem;
+    }
+
+    /* =========================================================
+       4. GALERIA E CARTÕES
+       ========================================================= */
+    .galeria {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;          /* centraliza a última linha */
+      gap: 24px;
+      max-width: 1060px;
+      margin: clamp(40px, 7vw, 72px) auto 0;
+    }
+
+    .site {
+      position: relative;
+      flex: 1 1 280px;
+      max-width: 320px;
+      padding: 26px 22px 24px;
+      text-align: center;
+      background: var(--vidro);
+      border: 1px solid var(--borda);
+      border-radius: 28px;
+      backdrop-filter: blur(14px);
+
+      /* Inclinação 3D: --rx e --ry são ajustados pelo JavaScript */
+      transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+      transition: transform 0.35s ease, border-color 0.35s ease, background 0.35s ease;
+
+      /* Entrada da página: um cartão após o outro (--i vem do JavaScript) */
+      animation: entrar 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: calc(var(--i, 0) * 90ms + 150ms);
+    }
+
+    /* Usa a propriedade "translate" para não brigar com o "transform" da inclinação */
+    @keyframes entrar {
+      from { opacity: 0; translate: 0 28px; }
+      to   { opacity: 1; translate: 0 0; }
+    }
+
+    .site:hover,
+    .site:focus-within {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: color-mix(in srgb, var(--cor) 60%, transparent);
+    }
+
+    /* Reflexo colorido que acompanha o mouse (--gx e --gy vêm do JavaScript) */
+    .site::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      background: radial-gradient(260px circle at var(--gx, 50%) var(--gy, 0%),
+                  color-mix(in srgb, var(--cor) 22%, transparent), transparent 70%);
+    }
+
+    .site:hover::after,
+    .site:focus-within::after {
+      opacity: 1;
+    }
+
+    /* Nome do site (h1 acima da imagem, como pede a atividade) */
+    .site h1 {
+      margin-bottom: 18px;
+      font-family: var(--fonte-titulo);
+      font-weight: 800;
+      font-size: 1.6rem;
+      letter-spacing: -0.02em;
+    }
+
+    /* =========================================================
+       5. IMAGEM E FONTE
+       ========================================================= */
+    .quadro {
+      margin: 0;
+    }
+
+    /* Placa clara: garante que qualquer logo apareça bem no fundo escuro */
+    .placa {
+      display: grid;
+      place-items: center;
+      height: 150px;
+      border-radius: 20px;
+      background: linear-gradient(160deg, #ffffff, color-mix(in srgb, var(--cor) 18%, #ffffff));
+      box-shadow:
+        0 18px 36px -18px color-mix(in srgb, var(--cor) 75%, transparent),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+    }
+
+    .placa img {
+      width: 76px;
+      height: 76px;
+      object-fit: contain;
+      transition: transform 0.35s ease;
+    }
+
+    .placa:hover img {
+      transform: scale(1.1);
+    }
+
+    /* Se a imagem não carregar, mostra a inicial do site no lugar */
+    .placa .inicial {
+      font-family: var(--fonte-titulo);
+      font-weight: 800;
+      font-size: 3.4rem;
+      color: var(--cor);
+    }
+
+    /* Fonte da imagem, logo abaixo dela */
+    .fonte {
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: var(--suave);
+    }
+
+    /* =========================================================
+       6. BOTÃO DE LINK
+       ========================================================= */
+    .botao {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+      padding: 11px 20px;
+      font-weight: 600;
+      color: var(--texto);
+      text-decoration: none;
+      background: color-mix(in srgb, var(--cor) 14%, transparent);
+      border: 1px solid color-mix(in srgb, var(--cor) 55%, transparent);
+      border-radius: 999px;
+      transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .botao svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.25s ease;
+    }
+
+    .botao:hover {
+      background: var(--cor);
+      border-color: var(--cor);
+      color: var(--cor-texto, #ffffff);
+    }
+
+    .botao:hover svg {
+      transform: translate(2px, -2px);
+    }
+
+    /* =========================================================
+       7. RODAPÉ
+       ========================================================= */
+    .rodape {
+      margin-top: 72px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--suave);
+    }
+
+    /* =========================================================
+       8. ACESSIBILIDADE: respeita quem prefere menos movimento
+       ========================================================= */
+    @media (prefers-reduced-motion: reduce) {
+      .site { animation: none; }
+      *, *::before, *::after { transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Cabeçalho: título do corpo da página (exigido pela atividade) -->
+  <header class="topo">
+    <h1>Meus sites favoritos: Nicholas Vieira</h1>
+    <p>Cinco lugares da internet onde eu estudo, trabalho e relaxo.</p>
+  </header>
+
+  <!-- Galeria com os 5 sites. Cada <article> é um cartão.
+       --cor é a cor da marca e --cor-texto é a cor do texto do botão ao passar o mouse -->
+  <main class="galeria">
+
+    <!-- ===== Site 1: YouTube ===== -->
+    <article class="site" style="--cor: #e62117;">
+      <!-- Nome do site acima da imagem -->
+      <h1>YouTube</h1>
+      <figure class="quadro">
+        <!-- A imagem também é um link (item opcional da atividade) -->
+        <a class="placa" href="https://www.youtube.com" target="_blank" rel="noopener" tabindex="-1">
+          <img src="https://www.google.com/s2/favicons?domain=youtube.com&sz=128" alt="Logo do YouTube">
+        </a>
+        <!-- Fonte da imagem, logo abaixo dela -->
+        <figcaption class="fonte">Fonte: (YouTube, 2026)</figcaption>
+      </figure>
+      <!-- Link abaixo da imagem -->
+      <a class="botao" href="https://www.youtube.com" target="_blank" rel="noopener">
+        Visitar YouTube
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+      </a>
+    </article>
+
+    <!-- ===== Site 2: GitHub ===== -->
+    <article class="site" style="--cor: #a371f7; --cor-texto: #0b0e1c;">
+      <h1>GitHub</h1>
+      <figure class="quadro">
+        <a class="placa" href="https://github.com" target="_blank" rel="noopener" tabindex="-1">
+          <img src="https://www.google.com/s2/favicons?domain=github.com&sz=128" alt="Logo do GitHub">
+        </a>
+        <figcaption class="fonte">Fonte: (GitHub, 2026)</figcaption>
+      </figure>
+      <a class="botao" href="https://github.com" target="_blank" rel="noopener">
+        Visitar GitHub
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+      </a>
+    </article>
+
+    <!-- ===== Site 3: Wikipédia ===== -->
+    <article class="site" style="--cor: #cbd5e1; --cor-texto: #0b0e1c;">
+      <h1>Wikipédia</h1>
+      <figure class="quadro">
+        <a class="placa" href="https://pt.wikipedia.org" target="_blank" rel="noopener" tabindex="-1">
+          <img src="https://www.google.com/s2/favicons?domain=wikipedia.org&sz=128" alt="Logo da Wikipédia">
+        </a>
+        <figcaption class="fonte">Fonte: (Wikipédia, 2026)</figcaption>
+      </figure>
+      <a class="botao" href="https://pt.wikipedia.org" target="_blank" rel="noopener">
+        Visitar Wikipédia
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+      </a>
+    </article>
+
+    <!-- ===== Site 4: Spotify ===== -->
+    <article class="site" style="--cor: #1ed760; --cor-texto: #0b0e1c;">
+      <h1>Spotify</h1>
+      <figure class="quadro">
+        <a class="placa" href="https://www.spotify.com" target="_blank" rel="noopener" tabindex="-1">
+          <img src="https://www.google.com/s2/favicons?domain=spotify.com&sz=128" alt="Logo do Spotify">
+        </a>
+        <figcaption class="fonte">Fonte: (Spotify, 2026)</figcaption>
+      </figure>
+      <a class="botao" href="https://www.spotify.com" target="_blank" rel="noopener">
+        Visitar Spotify
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+      </a>
+    </article>
+
+    <!-- ===== Site 5: Centro Paula Souza ===== -->
+    <article class="site" style="--cor: #e5251d;">
+      <h1>Centro Paula Souza</h1>
+      <figure class="quadro">
+        <a class="placa" href="https://www.cps.sp.gov.br" target="_blank" rel="noopener" tabindex="-1">
+          <img src="https://www.google.com/s2/favicons?domain=cps.sp.gov.br&sz=128" alt="Logo do Centro Paula Souza">
+        </a>
+        <figcaption class="fonte">Fonte: (Centro Paula Souza, 2026)</figcaption>
+      </figure>
+      <a class="botao" href="https://www.cps.sp.gov.br" target="_blank" rel="noopener">
+        Visitar Centro Paula Souza
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+      </a>
+    </article>
+
+  </main>
+
+  <!-- Rodapé com a assinatura do trabalho -->
+  <footer class="rodape">
+    <p>Nicholas Vieira - Trabalho ETEC Tópico 10</p>
+  </footer>
+
+  <script>
+    /* =========================================================
+       JAVASCRIPT: só efeitos visuais. A página funciona sem ele.
+       ========================================================= */
+    (() => {
+      'use strict';
+
+      const raiz = document.documentElement;                    // elemento <html>
+      const cartoes = document.querySelectorAll('.site');       // os 5 cartões
+      const COR_PADRAO = '#4f46e5';                             // cor da luz quando nenhum cartão está ativo
+      const INCLINACAO_MAXIMA = 7;                              // graus de inclinação máxima
+
+      // A inclinação só roda em telas com mouse e para quem não pediu menos movimento
+      const podeInclinar = matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches;
+
+      // Muda a cor da luz de fundo (a transição suave é feita pelo CSS)
+      const definirAmbiente = (cor) => raiz.style.setProperty('--ambiente', cor);
+
+      // Lê a cor da marca guardada em --cor no cartão
+      const corDoCartao = (cartao) => getComputedStyle(cartao).getPropertyValue('--cor').trim();
+
+      // Calcula a inclinação e a posição do reflexo conforme o mouse
+      function inclinar(cartao, evento) {
+        const caixa = cartao.getBoundingClientRect();
+        const x = (evento.clientX - caixa.left) / caixa.width;   // 0 a 1 na horizontal
+        const y = (evento.clientY - caixa.top) / caixa.height;   // 0 a 1 na vertical
+
+        cartao.style.setProperty('--ry', `${(x - 0.5) * 2 * INCLINACAO_MAXIMA}deg`);
+        cartao.style.setProperty('--rx', `${(0.5 - y) * 2 * INCLINACAO_MAXIMA}deg`);
+        cartao.style.setProperty('--gx', `${x * 100}%`);
+        cartao.style.setProperty('--gy', `${y * 100}%`);
+      }
+
+      // Devolve o cartão à posição reta
+      function endireitar(cartao) {
+        cartao.style.removeProperty('--rx');
+        cartao.style.removeProperty('--ry');
+      }
+
+      // Troca uma imagem quebrada pela inicial do site
+      function mostrarInicial(imagem) {
+        const cartao = imagem.closest('.site');
+        const inicial = document.createElement('span');
+        inicial.className = 'inicial';
+        inicial.setAttribute('aria-hidden', 'true');
+        inicial.textContent = cartao.querySelector('h1').textContent.trim().charAt(0);
+        imagem.replaceWith(inicial);
+      }
+
+      // Configura cada cartão
+      cartoes.forEach((cartao, indice) => {
+        cartao.style.setProperty('--i', indice);                // ordem usada no atraso da entrada
+        const cor = corDoCartao(cartao);
+
+        // Passou o mouse ou focou pelo teclado: a luz de fundo assume a cor do site
+        cartao.addEventListener('mouseenter', () => definirAmbiente(cor));
+        cartao.addEventListener('focusin', () => definirAmbiente(cor));
+
+        // Saiu do cartão: volta à cor padrão
+        cartao.addEventListener('mouseleave', () => definirAmbiente(COR_PADRAO));
+        cartao.addEventListener('focusout', (evento) => {
+          if (!cartao.contains(evento.relatedTarget)) definirAmbiente(COR_PADRAO);
+        });
+
+        if (podeInclinar) {
+          cartao.addEventListener('pointermove', (evento) => inclinar(cartao, evento));
+          cartao.addEventListener('pointerleave', () => endireitar(cartao));
+        }
+      });
+
+      // Trata imagens que falharam (inclusive as que falharam antes do script rodar)
+      document.querySelectorAll('.placa img').forEach((imagem) => {
+        if (imagem.complete && imagem.naturalWidth === 0) mostrarInicial(imagem);
+        else imagem.addEventListener('error', () => mostrarInicial(imagem), { once: true });
+      });
+    })();
+  </script>
+
+</body>
+</html>
