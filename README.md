@@ -1,6 +1,6 @@
 <div align="center">
 
-![Meus sites favoritos](src/img/banner.svg)
+![Meus sites favoritos](banner.svg)
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
@@ -29,7 +29,7 @@ Página web desenvolvida como atividade da Etec (curso técnico): uma galeria co
 
 <div align="center">
 
-![Anatomia de um cartão](src/img/anatomia_do_cartao.svg)
+![Anatomia de um cartão](anatomia_do_cartao.svg)
 
 </div>
 
@@ -47,8 +47,7 @@ Página web desenvolvida como atividade da Etec (curso técnico): uma galeria co
 
 | Arquivo | Descrição |
 | --- | --- |
-| `src/nicholas_Ag12_DS_I.html` | Página completa: HTML, CSS e JavaScript em um só arquivo. |
-| `src/img/` | Imagens do README: banner e anatomia do cartão. |
+| `nicholas_Ag12_DS_I.html` | Página completa: HTML, CSS e JavaScript em um só arquivo. |
 | `LICENSE` | Licença MIT. |
 
 ```
@@ -68,7 +67,7 @@ Pré-requisito: um navegador e conexão com a internet, para carregar as imagens
 
 ```
 git clone https://github.com/Yunoratsu/meus_sites_favoritos.git
-cd meus_sites_favoritos/src
+cd meus_sites_favoritos
 ```
 
 Depois, é só abrir o arquivo `nicholas_Ag12_DS_I.html` com duplo clique.
