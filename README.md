@@ -52,11 +52,9 @@ Página web desenvolvida como atividade da Etec (curso técnico): uma galeria co
 
 ```
 meus_sites_favoritos/
-├── src/
-│   ├── nicholas_Ag12_DS_I.html
-│   └── img/
-│       ├── banner.svg
-│       └── anatomia_do_cartao.svg
+├── nicholas_Ag12_DS_I.html
+├── banner.svg
+├── anatomia_do_cartao.svg
 ├── LICENSE
 └── README.md
 ```
